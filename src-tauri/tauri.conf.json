@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "slicknotes-tmp",
+  "productName": "SlickNotes",
   "version": "0.1.0",
-  "identifier": "com.perd1dao.slicknotes-tmp",
+  "identifier": "com.slicknotes.app",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
@@ -12,9 +12,9 @@
   "app": {
     "windows": [
       {
-        "title": "slicknotes-tmp",
-        "width": 800,
-        "height": 600
+        "title": "SlickNotes",
+        "width": 1000,
+        "height": 700
       }
     ],
     "security": {
