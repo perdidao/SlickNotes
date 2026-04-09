@@ -29,7 +29,7 @@ async function loadLastFolder() {
 }
 
 async function pickFolder() {
-  const selected = await open({ directory: true })
+  const selected = await open({ directory: true, defaultPath: currentFolder.value || undefined })
   if (selected) {
     await openFolder(selected)
   }
@@ -83,6 +83,42 @@ function toggleMode() {
   mode.value = mode.value === 'edit' ? 'preview' : 'edit'
 }
 
+async function refreshFiles() {
+  if (!currentFolder.value) return
+  files.value = await invoke('list_files', { folder: currentFolder.value })
+}
+
+async function createFile(filename) {
+  if (!currentFolder.value) return
+  const file = await invoke('create_file', {
+    folder: currentFolder.value,
+    filename,
+  })
+  await refreshFiles()
+  await selectFile(file)
+}
+
+async function renameFile(file, newName) {
+  const renamed = await invoke('rename_file', {
+    path: file.path,
+    newName,
+  })
+  await refreshFiles()
+  if (selectedFile.value?.path === file.path) {
+    selectedFile.value = renamed
+  }
+}
+
+async function deleteFile(file) {
+  await invoke('delete_file', { path: file.path })
+  if (selectedFile.value?.path === file.path) {
+    selectedFile.value = null
+    content.value = ''
+    isDirty.value = false
+  }
+  await refreshFiles()
+}
+
 export function useFiles() {
   return {
     currentFolder,
@@ -97,5 +133,8 @@ export function useFiles() {
     onContentChange,
     saveNow,
     toggleMode,
+    createFile,
+    renameFile,
+    deleteFile,
   }
 }

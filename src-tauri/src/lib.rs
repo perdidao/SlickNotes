@@ -52,12 +52,45 @@ fn write_file(path: String, content: String) -> Result<(), String> {
     fs::write(&path, &content).map_err(|e| format!("Failed to write {}: {}", path, e))
 }
 
+#[tauri::command]
+fn create_file(folder: String, filename: String) -> Result<FileEntry, String> {
+    let file_path = Path::new(&folder).join(format!("{}.md", filename));
+    if file_path.exists() {
+        return Err(format!("{}.md already exists", filename));
+    }
+    fs::write(&file_path, "").map_err(|e| e.to_string())?;
+    Ok(FileEntry {
+        filename,
+        path: file_path.to_string_lossy().to_string(),
+    })
+}
+
+#[tauri::command]
+fn rename_file(path: String, new_name: String) -> Result<FileEntry, String> {
+    let old_path = Path::new(&path);
+    let parent = old_path.parent().ok_or("Invalid file path")?;
+    let new_path = parent.join(format!("{}.md", new_name));
+    if new_path.exists() {
+        return Err(format!("{}.md already exists", new_name));
+    }
+    fs::rename(old_path, &new_path).map_err(|e| e.to_string())?;
+    Ok(FileEntry {
+        filename: new_name,
+        path: new_path.to_string_lossy().to_string(),
+    })
+}
+
+#[tauri::command]
+fn delete_file(path: String) -> Result<(), String> {
+    fs::remove_file(&path).map_err(|e| format!("Failed to delete {}: {}", path, e))
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_store::Builder::default().build())
-        .invoke_handler(tauri::generate_handler![list_files, read_file, write_file])
+        .invoke_handler(tauri::generate_handler![list_files, read_file, write_file, create_file, rename_file, delete_file])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -20,27 +20,29 @@ const rendered = computed(() => md.render(content.value || ''))
   overflow-y: auto;
   font-size: 15px;
   line-height: 1.7;
+  color: var(--text-primary);
 }
 
 .preview :deep(h1) { font-size: 1.8em; margin: 0.5em 0; }
 .preview :deep(h2) { font-size: 1.4em; margin: 0.5em 0; }
 .preview :deep(h3) { font-size: 1.2em; margin: 0.5em 0; }
+.preview :deep(a) { color: var(--accent); }
 .preview :deep(code) {
-  background: #f0f0f0;
+  background: var(--code-bg);
   padding: 2px 6px;
   border-radius: 3px;
   font-size: 0.9em;
 }
 .preview :deep(pre) {
-  background: #f0f0f0;
+  background: var(--code-bg);
   padding: 12px;
   border-radius: 4px;
   overflow-x: auto;
 }
 .preview :deep(blockquote) {
-  border-left: 3px solid #ccc;
+  border-left: 3px solid var(--bg-active);
   margin: 0;
   padding-left: 12px;
-  color: #666;
+  color: var(--text-secondary);
 }
 </style>

@@ -59,26 +59,27 @@ onMounted(() => {
   align-items: center;
   gap: 10px;
   padding: 8px 12px;
-  border-bottom: 1px solid #ddd;
-  background: #fafafa;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
 }
 
 .topbar button {
   padding: 5px 12px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border);
   border-radius: 4px;
-  background: #fff;
+  background: var(--bg-surface);
+  color: var(--text-primary);
   cursor: pointer;
   font-size: 13px;
 }
 
 .topbar button:hover {
-  background: #eee;
+  background: var(--bg-hover);
 }
 
 .folder-path {
   font-size: 12px;
-  color: #777;
+  color: var(--text-muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -91,11 +92,11 @@ onMounted(() => {
 
 .save-status {
   font-size: 12px;
-  color: #4a4;
+  color: var(--green);
 }
 
 .save-status.dirty {
-  color: #c44;
+  color: var(--red);
 }
 
 .body {
@@ -115,7 +116,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #999;
+  color: var(--text-muted);
   font-size: 15px;
 }
 </style>
