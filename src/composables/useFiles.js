@@ -43,7 +43,6 @@ async function openFolder(folder) {
   selectedFile.value = null
   content.value = ''
   isDirty.value = false
-  mode.value = 'edit'
 }
 
 async function selectFile(file) {
@@ -53,7 +52,6 @@ async function selectFile(file) {
   selectedFile.value = file
   content.value = await invoke('read_file', { path: file.path })
   isDirty.value = false
-  mode.value = 'edit'
 }
 
 async function saveFile() {

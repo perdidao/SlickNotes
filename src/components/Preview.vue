@@ -23,9 +23,13 @@ const rendered = computed(() => md.render(content.value || ''))
   color: var(--text-primary);
 }
 
-.preview :deep(h1) { font-size: 1.8em; margin: 0.5em 0; }
-.preview :deep(h2) { font-size: 1.4em; margin: 0.5em 0; }
-.preview :deep(h3) { font-size: 1.2em; margin: 0.5em 0; }
+.preview :deep(h1), .preview :deep(h2), .preview :deep(h3) {
+  color: var(--accent);
+}
+
+.preview :deep(h1) { font-size: 2em; margin: 0.25em 0 0.5em; color: var(--text-primary); }
+.preview :deep(h2) { font-size: 1.6em; margin: 0.25em 0 0.5em; }
+.preview :deep(h3) { font-size: 1.15em; margin: 0.25em 0 0.5em; }
 .preview :deep(a) { color: var(--accent); }
 .preview :deep(code) {
   background: var(--code-bg);
@@ -44,5 +48,38 @@ const rendered = computed(() => md.render(content.value || ''))
   margin: 0;
   padding-left: 12px;
   color: var(--text-secondary);
+}
+.preview :deep(img) {
+  max-width: 100%;
+  border-radius: 4px;
+  margin: 12px 0;
+}
+.preview :deep(ul), .preview :deep(ol) {
+  margin: 8px 0 24px;
+  padding-left: 20px;
+}
+.preview :deep(li) {
+  margin: 4px 0;
+}
+.preview :deep(hr) {
+  border: none;
+  border-top: 1px solid var(--bg-active);
+  margin: 24px 0;
+}
+.preview :deep(table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+}
+.preview :deep(th), .preview :deep(td) {
+  border: 1px solid var(--bg-active);
+  padding: 8px;
+  text-align: left;
+}
+.preview :deep(th) {
+  background: var(--bg-active);
+}
+.preview :deep(p) {
+  margin: 8px 0 24px;
 }
 </style>

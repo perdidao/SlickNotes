@@ -29,9 +29,10 @@ onMounted(() => {
       <span v-if="selectedFile" class="save-status" :class="{ dirty: isDirty }">
         {{ isDirty ? 'Unsaved' : 'Saved' }}
       </span>
-      <button v-if="selectedFile" @click="toggleMode">
-        {{ mode === 'edit' ? 'Preview' : 'Edit' }}
-      </button>
+      <div v-if="selectedFile" class="mode-toggle" @click="toggleMode">
+        <span class="mode-option" :class="{ active: mode === 'edit' }">Edit</span>
+        <span class="mode-option" :class="{ active: mode === 'preview' }">Preview</span>
+      </div>
     </header>
     <div class="body">
       <Sidebar />
@@ -97,6 +98,29 @@ onMounted(() => {
 
 .save-status.dirty {
   color: var(--red);
+}
+
+.mode-toggle {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mode-option {
+  padding: 4px 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+  background: var(--bg-surface);
+  transition: background 0.15s, color 0.15s;
+}
+
+.mode-option.active {
+  background: var(--accent);
+  color: var(--bg-primary);
+  font-weight: 600;
 }
 
 .body {

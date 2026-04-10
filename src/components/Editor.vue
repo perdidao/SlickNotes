@@ -5,7 +5,8 @@ import { EditorView, keymap, placeholder } from '@codemirror/view'
 import { EditorState } from '@codemirror/state'
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown'
 import { languages } from '@codemirror/language-data'
-import { oneDark } from '@codemirror/theme-one-dark'
+import { HighlightStyle, syntaxHighlighting, bracketMatching } from '@codemirror/language'
+import { tags } from '@lezer/highlight'
 import {
   defaultKeymap,
   indentWithTab,
@@ -16,15 +17,56 @@ import {
   closeBrackets,
   closeBracketsKeymap,
 } from '@codemirror/autocomplete'
-import {
-  syntaxHighlighting,
-  defaultHighlightStyle,
-  bracketMatching,
-} from '@codemirror/language'
 
 const { content, onContentChange, saveNow } = useFiles()
 const editorRef = ref(null)
 const view = shallowRef(null)
+
+const editorTheme = EditorView.theme({
+  '&': {
+    flex: '1',
+    fontSize: '15px',
+    backgroundColor: 'var(--bg-primary)',
+    color: 'var(--text-primary)',
+  },
+  '.cm-content': {
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    padding: '16px 0',
+    lineHeight: '1.7',
+    caretColor: 'var(--cursor)',
+  },
+  '&.cm-focused .cm-cursor': {
+    borderLeftColor: 'var(--cursor)',
+  },
+  '&.cm-focused .cm-selectionBackground, .cm-selectionBackground': {
+    backgroundColor: 'var(--selection)',
+  },
+  '.cm-activeLine': {
+    backgroundColor: 'var(--bg-hover)',
+  },
+  '.cm-gutters': {
+    display: 'none',
+  },
+  '.cm-scroller': {
+    padding: '0 16px',
+  },
+}, { dark: true })
+
+const editorHighlight = HighlightStyle.define([
+  { tag: tags.heading1, color: 'var(--text-primary)', fontWeight: 'bold', fontSize: '2em' },
+  { tag: tags.heading2, color: 'var(--accent)', fontWeight: 'bold', fontSize: '1.6em' },
+  { tag: tags.heading3, color: 'var(--accent)', fontWeight: 'bold', fontSize: '1.15em' },
+  { tag: [tags.heading4, tags.heading5, tags.heading6], color: 'var(--accent)', fontWeight: 'bold' },
+  { tag: tags.strong, color: 'var(--text-primary)', fontWeight: 'bold' },
+  { tag: tags.emphasis, color: 'var(--text-primary)', fontStyle: 'italic' },
+  { tag: tags.link, color: 'var(--cyan)', textDecoration: 'underline' },
+  { tag: tags.url, color: 'var(--cyan)' },
+  { tag: [tags.processingInstruction, tags.monospace], color: 'var(--text-secondary)', backgroundColor: 'var(--code-bg)', borderRadius: '3px', padding: '1px 4px' },
+  { tag: tags.quote, color: 'var(--text-secondary)', fontStyle: 'italic' },
+  { tag: tags.strikethrough, textDecoration: 'line-through', color: 'var(--text-muted)' },
+  { tag: [tags.meta, tags.comment], color: 'var(--text-muted)' },
+  { tag: tags.contentSeparator, color: 'var(--border)' },
+])
 
 // Track whether we're updating from external content change
 let updatingFromOutside = false
@@ -41,8 +83,8 @@ function createEditor() {
       closeBrackets(),
       bracketMatching(),
       markdown({ base: markdownLanguage, codeLanguages: languages }),
-      syntaxHighlighting(defaultHighlightStyle),
-      oneDark,
+      editorTheme,
+      syntaxHighlighting(editorHighlight),
       EditorView.lineWrapping,
       placeholder('Select a file to start editing...'),
       keymap.of([
@@ -62,23 +104,6 @@ function createEditor() {
         if (update.docChanged && !updatingFromOutside) {
           onContentChange(update.state.doc.toString())
         }
-      }),
-      EditorView.theme({
-        '&': {
-          flex: '1',
-          fontSize: '14px',
-        },
-        '.cm-content': {
-          fontFamily: 'monospace',
-          padding: '16px 0',
-          lineHeight: '1.6',
-        },
-        '.cm-gutters': {
-          display: 'none',
-        },
-        '.cm-scroller': {
-          padding: '0 16px',
-        },
       }),
     ],
   })
