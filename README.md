@@ -1,4 +1,4 @@
-![SlickNotes](https://i.imgur.com/4FWeVdg.png)
+![SlickNotes](https://i.imgur.com/SfZzmOA.png)
 
 # SlickNotes
 
